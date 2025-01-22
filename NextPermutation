@@ -35,3 +35,35 @@ Constraints:
 0 <= nums[i] <= 100
 
 ################# Solution #######################
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function(nums) {
+    let n = nums.length;
+    let i = n - 2;
+
+    // Step 1: Find the first decreasing element from the end
+    while (i >= 0 && nums[i] >= nums[i + 1]) {
+        i--;
+    }
+
+    if (i >= 0) {
+        // Step 2: Find the next larger element to the right of nums[i]
+        let j = n - 1;
+        while (nums[j] <= nums[i]) {
+            j--;
+        }
+        // Step 3: Swap nums[i] and nums[j]
+        [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+
+    // Step 4: Reverse the elements to the right of i
+    let left = i + 1, right = n - 1;
+    while (left < right) {
+        [nums[left], nums[right]] = [nums[right], nums[left]];
+        left++;
+        right--;
+    }
+};
+##########################################33
