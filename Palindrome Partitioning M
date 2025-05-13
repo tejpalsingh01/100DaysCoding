@@ -1,0 +1,59 @@
+############# Problem Statement ###############
+131. Palindrome Partitioning
+
+Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
+
+Example 1:
+
+Input: s = "aab"
+Output: [["a","a","b"],["aa","b"]]
+Example 2:
+
+Input: s = "a"
+Output: [["a"]]
+ 
+
+Constraints:
+
+1 <= s.length <= 16
+s contains only lowercase English letters.
+
+############## Solution ###############
+/**
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function(s) {
+    const result = [];
+
+    // चेक करें कि कोई substring palindrome है या नहीं
+    const isPalindrome = (str, left, right) => {
+        while (left < right) {
+            if (str[left] !== str[right]) return false;
+            left++;
+            right--;
+        }
+        return true;
+    };
+
+    // बैकट्रैकिंग फ़ंक्शन
+    const backtrack = (start, path) => {
+        if (start === s.length) {
+            result.push([...path]); // एक valid partition मिला
+            return;
+        }
+
+        for (let end = start; end < s.length; end++) {
+            if (isPalindrome(s, start, end)) {
+                path.push(s.substring(start, end + 1));
+                backtrack(end + 1, path);
+                path.pop(); // वापस पिछली स्थिति पर जाएँ
+            }
+        }
+    };
+
+    backtrack(0, []);
+    return result;
+};
+
+################################
