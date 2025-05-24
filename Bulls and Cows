@@ -39,5 +39,35 @@ secret.length == guess.length
 secret and guess consist of digits only.
 
 ############### Solution #############
+/**
+ * @param {string} secret
+ * @param {string} guess
+ * @return {string}
+ */
+var getHint = function(secret, guess) {
+    let bulls = 0;
+    let cows = 0;
+    let secretFreq = {};
+    let guessFreq = {};
 
+    // Step 1: Count Bulls and build frequency maps for non-bulls
+    for (let i = 0; i < secret.length; i++) {
+        if (secret[i] === guess[i]) {
+            bulls++;
+        } else {
+            // Count frequency of unmatched digits
+            secretFreq[secret[i]] = (secretFreq[secret[i]] || 0) + 1;
+            guessFreq[guess[i]] = (guessFreq[guess[i]] || 0) + 1;
+        }
+    }
+
+    // Step 2: Count Cows from frequency maps
+    for (let digit in guessFreq) {
+        if (secretFreq[digit]) {
+            cows += Math.min(secretFreq[digit], guessFreq[digit]);
+        }
+    }
+
+    return `${bulls}A${cows}B`;
+};
 #####################################
