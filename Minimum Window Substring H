@@ -1,0 +1,94 @@
+########### Problem Statement #############
+Minimum Window Substring
+
+Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+
+The testcases will be generated such that the answer is unique.
+
+ 
+
+Example 1:
+
+Input: s = "ADOBECODEBANC", t = "ABC"
+Output: "BANC"
+Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+Example 2:
+
+Input: s = "a", t = "a"
+Output: "a"
+Explanation: The entire string s is the minimum window.
+Example 3:
+
+Input: s = "a", t = "aa"
+Output: ""
+Explanation: Both 'a's from t must be included in the window.
+Since the largest window of s only has one 'a', return empty string.
+ 
+
+Constraints:
+
+m == s.length
+n == t.length
+1 <= m, n <= 105
+s and t consist of uppercase and lowercase English letters.
+ 
+
+Follow up: Could you find an algorithm that runs in O(m + n) time?
+
+############## Solution ##################
+
+/**
+ * @param {string} s
+ * @param {string} t
+ * @return {string}
+ */
+var minWindow = function(s, t) {
+    if (s.length < t.length) return "";
+
+    let need = {}, window = {};
+    
+    // Step 1: Count chars in t
+    for (let c of t) {
+        need[c] = (need[c] || 0) + 1;
+    }
+
+    let have = 0;
+    let needCount = Object.keys(need).length;
+
+    let res = [-1, -1]; // [start, end]
+    let resLen = Infinity;
+
+    let left = 0;
+
+    for (let right = 0; right < s.length; right++) {
+        let c = s[right];
+        window[c] = (window[c] || 0) + 1;
+
+        if (need[c] && window[c] === need[c]) {
+            have++;
+        }
+
+        // While window is valid
+        while (have === needCount) {
+            // Update result
+            if ((right - left + 1) < resLen) {
+                res = [left, right];
+                resLen = right - left + 1;
+            }
+
+            // Shrink from left
+            let lChar = s[left];
+            window[lChar]--;
+            if (need[lChar] && window[lChar] < need[lChar]) {
+                have--;
+            }
+            left++;
+        }
+    }
+
+    let [start, end] = res;
+    return resLen === Infinity ? "" : s.slice(start, end + 1);
+};
+
+
+####################################
