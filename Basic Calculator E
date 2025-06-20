@@ -33,6 +33,51 @@ Every number and running calculation will fit in a signed 32-bit integer.
 
 ############## Solution ####################
 
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var calculate = function(s) {
+    let stack = [];
+    let result = 0;
+    let number = 0;
+    let sign = 1; // +1 for positive, -1 for negative
+
+    for (let i = 0; i < s.length; i++) {
+        let char = s[i];
+
+        if (!isNaN(char) && char !== ' ') {
+            // digit मिल रही है, तो पूरा number बना लो
+            number = number * 10 + parseInt(char);
+        } else if (char === '+') {
+            result += sign * number;
+            number = 0;
+            sign = 1;
+        } else if (char === '-') {
+            result += sign * number;
+            number = 0;
+            sign = -1;
+        } else if (char === '(') {
+            stack.push(result);
+            stack.push(sign);
+            result = 0;
+            sign = 1;
+        } else if (char === ')') {
+            result += sign * number;
+            number = 0;
+            result *= stack.pop(); // pop sign
+            result += stack.pop(); // pop previous result
+        }
+        // space होने पर कुछ नहीं करना
+    }
+
+    // अंतिम number को जोड़ें
+    if (number !== 0) {
+        result += sign * number;
+    }
+
+    return result;
+};
 
 
 
