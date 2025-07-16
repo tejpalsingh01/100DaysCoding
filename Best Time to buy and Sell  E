@@ -1,0 +1,78 @@
+############# Problem Statement ########
+
+🌟 LeetCode Day #200: Best Time to Buy and Sell Stock
+📘 Problem 121 — Easy
+
+🧩 Problem Summary
+You are given an array prices where prices[i] is the stock price on the ith day.
+Your task:
+👉 Pick one day to buy and a future day to sell to maximize your profit.
+👉 Return the maximum profit. If no profit is possible, return 0.
+
+💡 Core Idea
+Track the minimum price seen so far and compute the potential profit at each step.
+
+Steps:
+
+Initialize min_price as infinity.
+
+Iterate through prices:
+
+Update min_price if the current price is lower.
+
+Calculate profit = current price - min_price.
+
+Keep track of the maximum profit.
+
+📊 Example
+Input:
+prices = [7, 1, 5, 3, 6, 4]
+
+Output:
+5
+Explanation:
+Buy at price 1 (day 2), sell at price 6 (day 5). Profit = 6 - 1 = 5.
+
+Input:
+prices = [7, 6, 4, 3, 1]
+
+Output:
+0
+Explanation:
+No opportunity for profit.
+
+⏱ Time Complexity
+O(n) — Single pass through the array.
+
+🛑 Space Complexity
+O(1) — Constant extra space.
+
+🚀 Why This Problem Matters
+✅ Teaches you how to track state over iterations.
+✅ Sharpens skills in greedy algorithms.
+✅ Frequently asked in interviews.
+
+🔖 #LeetCode #Day200 #Array #Greedy #InterviewPrep #BestTimeToBuyAndSellStock
+
+########### Solution #################
+/**
+ * @param {number[]} prices
+ * @return {number}
+ */
+var maxProfit = function(prices) {
+    let minPrice = Infinity; // अब तक का सबसे सस्ता price
+    let maxProfit = 0;       // अब तक का सबसे ज्यादा मुनाफा
+    
+    for (let price of prices) {
+        if (price < minPrice) {
+            minPrice = price; // नया सस्ता price मिल गया
+        } else {
+            maxProfit = Math.max(maxProfit, price - minPrice); // profit update करें
+        }
+    }
+    
+    return maxProfit;
+};
+
+
+#########################################
