@@ -1,0 +1,84 @@
+######### Problem Statement ############
+315. Count of Smaller Numbers After Self
+Solved
+Hard
+Topics
+premium lock icon
+Companies
+Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
+
+ 
+
+Example 1:
+
+Input: nums = [5,2,6,1]
+Output: [2,1,1,0]
+Explanation:
+To the right of 5 there are 2 smaller elements (2 and 1).
+To the right of 2 there is only 1 smaller element (1).
+To the right of 6 there is 1 smaller element (1).
+To the right of 1 there is 0 smaller element.
+Example 2:
+
+Input: nums = [-1]
+Output: [0]
+Example 3:
+
+Input: nums = [-1,-1]
+Output: [0,0]
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+-104 <= nums[i] <= 104
+######### Solution ##############
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var countSmaller = function(nums) {
+    let counts = new Array(nums.length).fill(0);
+    let indexedNums = nums.map((val, idx) => [val, idx]);
+
+    const mergeSort = (arr) => {
+        if(arr.length <= 1) return arr;
+        let mid = Math.floor(arr.length / 2);
+        let left = mergeSort(arr.slice(0, mid));
+        let right = mergeSort(arr.slice(mid));
+
+        let merged = [];
+        let i = 0, j = 0, rightCount = 0;
+
+        while(i < left.length && j < right.length )
+        {
+            if(left[i][0] <= right[j][0]){
+                counts[left[i][1]] += rightCount;
+                merged.push(left[i]);
+                i++;
+
+            }else{
+                rightCount++;
+                merged.push(right[j]);
+                j++;
+            }
+        }
+
+        while(i< left.length){
+            counts[left[i][1]] += rightCount;
+            merged.push(left[i]);
+            i++;
+        }
+
+        while(j< right.length){
+            merged.push(right[j]);
+            j++;
+        }
+
+        return merged;
+    };
+    mergeSort(indexedNums);
+    return counts;
+};
+
+################################
