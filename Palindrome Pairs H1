@@ -1,0 +1,93 @@
+############## Problem Statement ###############
+336. Palindrome Pairs
+Solved
+
+You are given a 0-indexed array of unique strings words.
+
+A palindrome pair is a pair of integers (i, j) such that:
+
+0 <= i, j < words.length,
+i != j, and
+words[i] + words[j] (the concatenation of the two strings) is a palindrome.
+Return an array of all the palindrome pairs of words.
+
+You must write an algorithm with O(sum of words[i].length) runtime complexity.
+
+ 
+
+Example 1:
+
+Input: words = ["abcd","dcba","lls","s","sssll"]
+Output: [[0,1],[1,0],[3,2],[2,4]]
+Explanation: The palindromes are ["abcddcba","dcbaabcd","slls","llssssll"]
+Example 2:
+
+Input: words = ["bat","tab","cat"]
+Output: [[0,1],[1,0]]
+Explanation: The palindromes are ["battab","tabbat"]
+Example 3:
+
+Input: words = ["a",""]
+Output: [[0,1],[1,0]]
+Explanation: The palindromes are ["a","a"]
+ 
+
+Constraints:
+
+1 <= words.length <= 5000
+0 <= words[i].length <= 300
+words[i] consists of lowercase English letters.
+############## Solution ##################
+/**
+ * @param {string[]} words
+ * @return {number[][]}
+ */
+var palindromePairs = function(words) {
+
+    let wordMap = new Map();
+    let result = [];
+
+    //Step 1: store word to index mapping
+    for(let i = 0; i< words.length; i++){
+        wordMap.set(words[i], i);
+
+    }
+
+    //Step 2: loop through each word
+    for(let i = 0; i < words.length; i++ ){
+        let word = words[i];
+
+        for(let j = 0; j <= word.length; j++){
+            let prefix = word.substring(0, j);
+            let suffix = word.substring(j);
+
+            if(isPalindrome(suffix)){
+                let reversedPrefix = prefix.split('').reverse().join('');
+                if(wordMap.has(reversedPrefix) && wordMap.get(reversedPrefix) !== i){
+                    result.push([i, wordMap.get(reversedPrefix)]);
+                }
+            }
+
+            if(j >0 && isPalindrome(prefix)){
+                let reversedSuffix = suffix.split('').reverse().join('');
+                if(wordMap.has(reversedSuffix) && wordMap.get(reversedSuffix) !== i){
+                    result.push([wordMap.get(reversedSuffix), i]);
+                }
+            }
+        }
+    }
+
+    return result;
+};
+
+function isPalindrome(str){
+    let left = 0, right = str.length -1;
+    while(left < right){
+        if(str[left] !== str[right]) return false;
+        left++;
+        right--;
+    }
+    return true;
+}
+
+############################################

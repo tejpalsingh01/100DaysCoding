@@ -1,0 +1,66 @@
+################# Problem Statement ################
+Longest Palindromic Substring
+Solved
+Medium
+Topics
+Companies
+Hint
+Given a string s, return the longest 
+palindromic
+ 
+substring
+ in s.
+
+ 
+
+Example 1:
+
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+Example 2:
+
+Input: s = "cbbd"
+Output: "bb"
+ 
+
+Constraints:
+
+1 <= s.length <= 1000
+
+##################### Solution ###############
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var longestPalindrome = function(s) {
+    if (s.length === 0) return "";
+
+    let start = 0, end = 0;
+
+    const expandAroundCenter = (left, right) => {
+        while (left >= 0 && right < s.length && s[left] === s[right] ){
+            left--;
+            right++;
+        }
+        return right - left -1; // Length of the pallindrome
+    };
+    for(let i = 0; i<s.length; i++){
+        //odd-length palindromes (centered at one character)
+        let len1 = expandAroundCenter(i,i);
+        //Even-length palindromes (centered between two characters)
+        let len2 = expandAroundCenter(i,i+1);
+
+        //Get the maximum length 
+        let maxLen = Math.max(len1, len2);
+
+        // Update start and end indices if a longer palindrome is found
+        if(maxLen > end - start){
+            start = i-Math.floor((maxLen - 1)/2);
+            end = i+Math.floor(maxLen/2);
+        }
+    }
+    return s.substring(start , end+1);
+};
+
+##########################################

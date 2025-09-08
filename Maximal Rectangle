@@ -1,0 +1,66 @@
+############## Problem Statement #################
+85. Maximal Rectangle
+
+Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+Example 1:
+Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+Output: 6
+Explanation: The maximal rectangle is shown in the above picture.
+Example 2:
+
+Input: matrix = [["0"]]
+Output: 0
+Example 3:
+
+Input: matrix = [["1"]]
+Output: 1
+ 
+
+Constraints:
+
+rows == matrix.length
+cols == matrix[i].length
+1 <= row, cols <= 200
+matrix[i][j] is '0' or '1'.
+
+############### Solution #####################
+var maximalRectangle = function(matrix) {
+    if (matrix.length === 0 || matrix[0].length === 0) return 0;
+
+    const cols = matrix[0].length;
+    let maxArea = 0;
+    let heights = Array(cols).fill(0);
+
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < cols; j++) {
+            
+            heights[j] = matrix[i][j] === '1' ? heights[j] + 1 : 0;
+        }
+        
+        maxArea = Math.max(maxArea, largestRectangleArea(heights));
+    }
+
+    return maxArea;
+};
+
+
+function largestRectangleArea(heights) {
+    let stack = [];
+    heights.push(0);
+    let maxArea = 0;
+
+    for (let i = 0; i < heights.length; i++) {
+        while (stack.length > 0 && heights[i] < heights[stack[stack.length - 1]]) {
+            let height = heights[stack.pop()];
+            let width = stack.length === 0 ? i : i - stack[stack.length - 1] - 1;
+            maxArea = Math.max(maxArea, height * width);
+        }
+        stack.push(i);
+    }
+
+    heights.pop(); 
+    return maxArea;
+}
+
+
+###############################################
